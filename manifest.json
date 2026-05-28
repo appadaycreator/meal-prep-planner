@@ -1,8 +1,9 @@
 {
   "name": "Meal Prep Planner",
   "short_name": "meal-prep-pl",
-  "start_url": "/",
+  "start_url": "/meal-prep-planner/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#6366f1"
+  "theme_color": "#6366f1",
+  "scope": "/meal-prep-planner/"
 }
