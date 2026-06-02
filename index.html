@@ -121,6 +121,11 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
             <div class="card">
               <div id="output"></div>
               <p id="detail" style="color:#666;font-size:13px;margin-top:8px;"></p>
+              <div id="export-buttons" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn" style="background:#10b981;flex:1;min-width:140px;padding:10px;font-size:14px;" onclick="copyShoppingList()">📋 買い出しリストをコピー</button>
+                <button class="btn" style="background:#3b82f6;flex:1;min-width:140px;padding:10px;font-size:14px;" onclick="downloadShoppingList()">💾 テキスト保存</button>
+              </div>
+              <div id="shopping-links" style="margin-top:12px;"></div>
             </div>
           </div>
         </div>
@@ -194,7 +199,6 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
 
     
 <script>
-    // ★ここだけ実装（約10行）★
     const CFG = {
       inputs: ['val1','val2'],
       error: '人数と調理時間を入力してください',
@@ -222,6 +226,45 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
         {name:'白菜の塩昆布和え',      time:5,  ing:'白菜・塩昆布・ごま油'},
       ]
     };
+    const SHOPPING_KEYWORDS = {
+      '鶏むね肉': '鶏むね肉 1kg',
+      '塩麹': '塩麹',
+      '酒': '料理酒',
+      'ほうれん草': 'ほうれん草 冷凍',
+      '白ごま': '白ごま',
+      '醤油': '醤油 500ml',
+      '大根': '大根',
+      '人参': '人参 1kg',
+      'だし': 'だし汁',
+      '豚バラ': '豚バラ肉 スライス',
+      '根菜': '根菜ミックス',
+      '味噌': '味噌 500g',
+      'ひじき': 'ひじき 乾燥',
+      '油揚げ': '油揚げ',
+      '鶏手羽元': '鶏手羽元 1kg',
+      '酢': '穀物酢',
+      '砂糖': '砂糖 1kg',
+      '厚揚げ': '厚揚げ',
+      '白菜': '白菜',
+      'みりん': 'みりん',
+      'じゃがいも': 'じゃがいも 1kg',
+      '玉ねぎ': '玉ねぎ 1kg',
+      '豚こま': '豚こま肉',
+      'にんにく': 'にんにく',
+      '塩昆布': '塩昆布',
+      'ごま油': 'ごま油 400ml',
+      '塩': '食塩',
+      'ポリ袋': 'ポリ袋 加熱用',
+      '卵': '卵 10個',
+      'キャベツ': 'キャベツ',
+      '昆布': '昆布',
+      'もやし': 'もやし',
+      '乾燥わかめ': 'わかめ 乾燥',
+      '豆腐': '木綿豆腐',
+      '塩胡椒': '塩こしょう',
+    };
+    let lastRecipeList = [];
+    let lastIngredients = {};
     function calcLogic(vals) {
       const people = vals[0]; const minutes = vals[1];
       const style = document.getElementById('val3').value;
@@ -231,13 +274,50 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
       if (!selected.length) { return {result: '時間が足りません', detail: '調理時間を増やすか、メニューを減らしてください'}; }
       const ingSet = {};
       selected.forEach(r => r.ing.split('・').forEach(i => { ingSet[i.trim()] = true; }));
+      lastRecipeList = selected;
+      lastIngredients = ingSet;
       let html = `<h3 style="font-size:14px;font-weight:700;color:#EA580C;margin-bottom:8px;">📋 今週のまとめ調理プラン（${people}人分）</h3><ul style="padding-left:18px;margin:0 0 12px;">`;
       selected.forEach(r => { html += `<li style="margin-bottom:6px;font-size:13px;"><b>${r.name}</b>（約${r.time}分）<br><span style="color:#888;font-size:12px;">材料：${r.ing}</span></li>`; });
-      html += `</ul><p style="font-size:13px;font-weight:700;margin-bottom:4px;">🛒 買い出しリスト</p><p style="font-size:13px;color:#555;background:#FFEDD5;padding:10px;border-radius:8px;">${Object.keys(ingSet).join('・')}</p>`;
+      html += `</ul><p style="font-size:13px;font-weight:700;margin-bottom:4px;">🛒 買い出しリスト</p><p style="font-size:13px;color:#555;background:#FFEDD5;padding:10px;border-radius:8px;" id="shopping-list">${Object.keys(ingSet).join('・')}</p>`;
       const detail = `合計調理時間：約${used}分 ／ ${selected.length}品 ／ 残り${minutes - used}分で後片付けも余裕あり`;
       return {result: html, detail};
     }
-    // ★以下変更不要★
+    function copyShoppingList(){
+      const text = document.getElementById('shopping-list')?.textContent || '';
+      if(!text){ alert('買い出しリストを表示してください'); return; }
+      navigator.clipboard.writeText(text).then(() => {
+        alert('買い出しリストをコピーしました！');
+      }).catch(err => {
+        alert('コピーに失敗しました');
+      });
+    }
+    function downloadShoppingList(){
+      const text = document.getElementById('shopping-list')?.textContent || '';
+      if(!text){ alert('買い出しリストを表示してください'); return; }
+      const recipes = lastRecipeList.map(r => r.name).join('\n');
+      const content = `【週末まとめ調理プラン 買い出しリスト】\n\n【レシピ】\n${recipes}\n\n【買い出しリスト】\n${text}\n\n作成日時: ${new Date().toLocaleString('ja-JP')}`;
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `買い出しリスト_${new Date().toISOString().slice(0,10)}.txt`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+    function generateShoppingLinks(){
+      const container = document.getElementById('shopping-links');
+      if(!container || Object.keys(lastIngredients).length === 0) return;
+      container.innerHTML = `<p style="font-size:13px;font-weight:700;margin-bottom:8px;">🛍️ 楽天・Amazonで購入</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">`;
+      Object.keys(lastIngredients).forEach(ing => {
+        const keyword = SHOPPING_KEYWORDS[ing] || ing;
+        const rakutenUrl = `https://hb.afl.rakuten.co.jp/ichiba/541ad0d2.ce2bed12.541ad0d3.a1a2318c/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F${encodeURIComponent(keyword)}%2F&link_type=text`;
+        const amazonUrl = `https://www.amazon.co.jp/s?k=${encodeURIComponent(keyword)}&tag=appadaycrea0f-22`;
+        container.innerHTML += `<a href="${rakutenUrl}" target="_blank" rel="nofollow noopener" style="display:block;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px;font-size:12px;color:#666;text-decoration:none;text-align:center;word-break:break-word;"><b style="color:#BF0000;">楽天</b><br>${ing}</a>`;
+        container.innerHTML += `<a href="${amazonUrl}" target="_blank" rel="noopener" style="display:block;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px;font-size:12px;color:#666;text-decoration:none;text-align:center;word-break:break-word;"><b style="color:#ff9900;">Amazon</b><br>${ing}</a>`;
+      });
+      container.innerHTML += `</div>`;
+    }
     document.addEventListener('DOMContentLoaded',()=>{
       CFG.inputs.forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('keydown',e=>{ if(e.key==='Enter') calculate(); }); });
     });
@@ -248,6 +328,7 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
       document.getElementById('output').innerHTML=typeof result==='number'?result.toLocaleString():result;
       const d=document.getElementById('detail'); if(d) d.textContent=detail||'';
       document.getElementById('result').classList.add('show');
+      generateShoppingLinks();
     }
     </script>
 <!-- A8アフィリエイト: RIZAP COOK -->
