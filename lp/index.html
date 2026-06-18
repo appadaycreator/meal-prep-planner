@@ -35,7 +35,12 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
       *{margin:0;padding:0;box-sizing:border-box}
       :root{--green:#10B981;--green-d:#059669;--green-dd:#065f46;--amber:#F59E0B;--ink:#1f2937;--mute:#6b7280;--bg:#f4faf6}
       html{scroll-behavior:smooth}
-      body{font-family:'Noto Sans JP',sans-serif;color:var(--ink);background:#fff;line-height:1.7;-webkit-font-smoothing:antialiased}
+      body{font-family:'Noto Sans JP',sans-serif;color:var(--ink);background:linear-gradient(180deg,#f3faf2,#f7fbf3 40%,#fbfaf2);line-height:1.7;-webkit-font-smoothing:antialiased}
+      /* hand-drawn leaf decorations */
+      .deco-leaf{position:absolute;pointer-events:none;z-index:0;opacity:.55}
+      .deco-leaf svg{display:block;width:100%;height:100%}
+      section{position:relative;z-index:1}
+      .wrap{position:relative;z-index:2}
       a{text-decoration:none;color:inherit}
       .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
       .btn-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--green);color:#fff;font-weight:800;font-size:17px;padding:16px 30px;border-radius:14px;box-shadow:0 10px 24px rgba(16,185,129,.32);transition:all .2s}
@@ -63,9 +68,9 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
       .pill .ic{width:26px;height:26px;border-radius:8px;background:#ecfdf5;display:flex;align-items:center;justify-content:center;font-size:14px}
       .hero .note{font-size:12px;color:var(--mute);margin-top:12px}
       /* Phone mock */
-      .hero-visual{position:relative;display:flex;justify-content:center}
-      .photo-bg{position:absolute;inset:0;border-radius:24px;background:linear-gradient(135deg,#d1fae5,#fde7c2);overflow:hidden}
-      .photo-bg .dish{position:absolute;border-radius:14px;background:rgba(255,255,255,.65);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 6px 16px rgba(0,0,0,.08)}
+      .hero-visual{position:relative;display:flex;justify-content:center;min-height:420px;align-items:center}
+      .photo-bg{position:absolute;inset:0;border-radius:24px;background-image:linear-gradient(135deg,rgba(6,95,70,.32),rgba(6,95,70,.12) 55%,rgba(245,158,11,.22)),url(../assets/photos/photo_20.jpg);background-size:cover;background-position:center;overflow:hidden;box-shadow:0 22px 46px rgba(6,95,70,.2)}
+      .photo-bg::after{content:"今すぐすべて確認！";position:absolute;top:16px;right:16px;background:var(--amber);color:#fff;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;box-shadow:0 6px 14px rgba(245,158,11,.4);z-index:3}
       .phone{position:relative;width:248px;background:#fff;border-radius:34px;border:9px solid #1f2937;box-shadow:0 26px 50px rgba(0,0,0,.22);padding:14px 12px;z-index:2;margin:18px 0}
       .phone .scr-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
       .phone .scr-head b{font-size:13px;color:var(--green-dd)}
@@ -91,8 +96,10 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
       .reco-head{text-align:center;margin-bottom:32px}
       .reco-head h2{font-size:26px;font-weight:900;color:#10301f}
       .reco-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-      .reco-card{background:#fff;border-radius:18px;padding:22px 18px;box-shadow:0 6px 18px rgba(16,185,129,.08)}
-      .reco-card .av{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#d1fae5,#fde7c2);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:14px}
+      .reco-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(16,185,129,.08)}
+      .reco-card .ph{height:128px;background-size:cover;background-position:center;position:relative}
+      .reco-card .ph .tagico{position:absolute;left:12px;bottom:-18px;width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+      .reco-card .bd{padding:26px 18px 22px}
       .reco-card h3{font-size:14px;font-weight:800;color:#10301f;margin-bottom:6px;line-height:1.5}
       .reco-card p{font-size:12px;color:var(--mute)}
       /* Steps */
@@ -175,6 +182,7 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
     <main id="top">
       <!-- HERO -->
       <section class="hero" style="padding-top:48px">
+        <div class="deco-leaf" style="top:24px;left:-10px;width:120px;height:120px;transform:rotate(-12deg)"><svg viewBox="0 0 100 100" fill="none"><path d="M50 92C50 60 30 40 12 34c10 26 22 42 38 58Z" fill="#34d399"/><path d="M50 92C50 56 70 36 90 30c-9 27-23 45-40 62Z" fill="#10b981"/><path d="M50 92V44" stroke="#065f46" stroke-width="2.5" stroke-linecap="round"/></svg></div>
         <div class="wrap hero-grid">
           <div>
             <span class="tag-soft">🌿 週末に全調理を完結。平日もっと自由に。</span>
@@ -189,12 +197,7 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
             <p class="note">アカウント登録なしですぐに始められます</p>
           </div>
           <div class="hero-visual">
-            <div class="photo-bg">
-              <div class="dish" style="width:78px;height:78px;top:18px;left:14px">🥗</div>
-              <div class="dish" style="width:70px;height:70px;bottom:30px;left:24px">🍱</div>
-              <div class="dish" style="width:74px;height:74px;top:30px;right:18px">🍲</div>
-              <div class="dish" style="width:66px;height:66px;bottom:24px;right:30px">🥘</div>
-            </div>
+            <div class="photo-bg" role="img" aria-label="作り置きおかずと新鮮な野菜"></div>
             <div class="phone" aria-hidden="true">
               <div class="scr-head"><b>今週のプラン</b><span class="badge">週末にすべて完結！</span></div>
               <div class="row"><span class="dot">🍗</span>鶏むね肉の塩麹蒸し<span class="t">20分</span></div>
@@ -212,6 +215,8 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
 
       <!-- 選ばれる理由 -->
       <section id="features">
+        <div class="deco-leaf" style="top:40px;left:8px;width:96px;height:96px;transform:rotate(20deg);opacity:.4"><svg viewBox="0 0 100 100"><path d="M50 92C50 60 30 40 12 34c10 26 22 42 38 58Z" fill="#6ee7b7"/><path d="M50 92C50 56 70 36 90 30c-9 27-23 45-40 62Z" fill="#34d399"/></svg></div>
+        <div class="deco-leaf" style="bottom:30px;right:8px;width:110px;height:110px;transform:rotate(-150deg);opacity:.4"><svg viewBox="0 0 100 100"><path d="M50 92C50 60 30 40 12 34c10 26 22 42 38 58Z" fill="#6ee7b7"/><path d="M50 92C50 56 70 36 90 30c-9 27-23 45-40 62Z" fill="#34d399"/></svg></div>
         <div class="wrap">
           <p class="sec-label">選ばれる理由</p>
           <h2 class="sec-title">忙しいあなたの週末を、最高の投資に。</h2>
@@ -247,24 +252,32 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
             <div class="reco-head"><h2>こんな方におすすめ</h2></div>
             <div class="reco-grid">
               <div class="reco-card">
-                <div class="av">🗓️</div>
-                <h3>平日は忙しくて週末にまとめて作りたい方</h3>
-                <p>週末2〜3時間でまとめ調理。平日の「今日何作ろう」から解放されます。</p>
+                <div class="ph" style="background-image:url(../assets/photos/photo_02.jpg)"><span class="tagico">🗓️</span></div>
+                <div class="bd">
+                  <h3>平日は忙しくて週末にまとめて作りたい方</h3>
+                  <p>週末2〜3時間でまとめ調理。平日の「今日何作ろう」から解放されます。</p>
+                </div>
               </div>
               <div class="reco-card">
-                <div class="av">👨‍👩‍👧‍👦</div>
-                <h3>家族やパートナーの食事を用意する方</h3>
-                <p>人数・好み・食事制限を考慮して、家族みんな分のプランを自動調整。</p>
+                <div class="ph" style="background-image:url(../assets/photos/photo_12.jpg)"><span class="tagico">👨‍👩‍👧‍👦</span></div>
+                <div class="bd">
+                  <h3>家族やパートナーの食事を用意する方</h3>
+                  <p>人数・好み・食事制限を考慮して、家族みんな分のプランを自動調整。</p>
+                </div>
               </div>
               <div class="reco-card">
-                <div class="av">🥦</div>
-                <h3>食材をむだなく使いたい方</h3>
-                <p>同じ食材を使い回すレシピを組み合わせ、買った食材を使い切ります。</p>
+                <div class="ph" style="background-image:url(../assets/photos/photo_20.jpg)"><span class="tagico">🥦</span></div>
+                <div class="bd">
+                  <h3>食材をむだなく使いたい方</h3>
+                  <p>同じ食材を使い回すレシピを組み合わせ、買った食材を使い切ります。</p>
+                </div>
               </div>
               <div class="reco-card">
-                <div class="av">🍱</div>
-                <h3>作り置きを習慣にしたい方</h3>
-                <p>保存目安つきのプランで、無理なくミールプレップを続けられます。</p>
+                <div class="ph" style="background-image:url(../assets/photos/photo_07.jpg)"><span class="tagico">🍱</span></div>
+                <div class="bd">
+                  <h3>作り置きを習慣にしたい方</h3>
+                  <p>保存目安つきのプランで、無理なくミールプレップを続けられます。</p>
+                </div>
               </div>
             </div>
           </div>
@@ -274,8 +287,8 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
       <!-- 使い方3ステップ -->
       <section id="steps" style="padding-top:0">
         <div class="wrap">
-          <p class="sec-label">使い方はかんたん</p>
-          <h2 class="sec-title">3ステップで週末の調理プランが完成</h2>
+          <p class="sec-label">STEP</p>
+          <h2 class="sec-title">使い方はかんたん3ステップ</h2>
           <div class="steps-wrap">
             <div class="steps-grid">
               <div class="steps">
@@ -311,6 +324,8 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
 
       <!-- ユーザーの声 -->
       <section>
+        <div class="deco-leaf" style="bottom:-6px;left:24px;width:130px;height:130px;transform:rotate(8deg);opacity:.35"><svg viewBox="0 0 100 100"><path d="M50 95C50 62 32 42 14 36c9 27 22 44 38 60Z" fill="#6ee7b7"/><path d="M50 95C50 58 68 38 88 32c-8 28-22 46-40 64Z" fill="#34d399"/><path d="M50 95V46" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div class="deco-leaf" style="bottom:-6px;right:24px;width:130px;height:130px;transform:rotate(-8deg) scaleX(-1);opacity:.35"><svg viewBox="0 0 100 100"><path d="M50 95C50 62 32 42 14 36c9 27 22 44 38 60Z" fill="#6ee7b7"/><path d="M50 95C50 58 68 38 88 32c-8 28-22 46-40 64Z" fill="#34d399"/><path d="M50 95V46" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/></svg></div>
         <div class="wrap">
           <p class="sec-label">ユーザーの声</p>
           <h2 class="sec-title">週末調理で、平日が変わりました</h2>
